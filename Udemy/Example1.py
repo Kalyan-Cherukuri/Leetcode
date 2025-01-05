@@ -2,7 +2,7 @@ class Node:
     def __init__(self, value):
         self.value = value
         self.next = None
-
+    
 class LinkedList:
     def __init__(self, value):
         new_node = Node(value)
@@ -15,7 +15,7 @@ class LinkedList:
         while temp is not None:
             print(temp.value)
             temp = temp.next
-
+        
     def append(self, value):
         new_node = Node(value)
         if self.head == None:
@@ -64,76 +64,57 @@ class LinkedList:
         if self.length == 0:
             self.tail = None
         return temp.value
-
+    
     def get(self, index):
         if index < 0 or index >= self.length:
             return None
         temp = self.head
         for _ in range(index):
             temp = temp.next
-        return temp     
-
+        return temp
+    
     def set_value(self, index, value):
         temp = self.get(index)
         if temp:
-            temp.value = value
+            temp.value= value
             return True
         return False
     
     def insert(self, index, value):
+        if index < 0 or index >= self.length:
+            return False
+        if index == 0:
+            return self.prepend(value)
+        if index == self.length:
+              return self.append(value)
         new_node = Node(value)
-        temp = self.get(index)
+        temp = self.get(index - 1)
+        new_node.next = temp.next
         temp.next = new_node
-        new_node.next = temp.next.next
-        
+        self.length += 1
+        return True
     
-print("Creating Linked List")
-my_linked_list = LinkedList(0)
-my_linked_list.append(1)
-my_linked_list.append(2)
-my_linked_list.append(3)
-
-my_linked_list.printlist()
-
-
-my_linked_list.insert(3,4)
-
-my_linked_list.printlist()
-
-my_linked_list.insert(1,7)
-
-my_linked_list.printlist()
-
-"""
-print("set value function")
-my_linked_list.set_value(2,7)
-"""
-
-"""
-print("Get function being used")
-print(my_linked_list.get_number(0))
-print(my_linked_list.get_number(1))
-print(my_linked_list.get_number(2))
-print(my_linked_list.get_number(3))
-"""
-"""
-print("pop First: ")
-print(my_linked_list.popfirst())
-
-print(my_linked_list.popfirst())
-
-print(my_linked_list.popfirst())
-
-print(my_linked_list.popfirst())
-
-print(my_linked_list.popfirst())
-
-print("Printing: ")
-my_linked_list.printlist()
-
-"""
-
-"""
-#print(my_linked_list.pop())
-
-print(my_linked_list.pop())"""
+    def remove(self, index):
+        if index < 0 or index >= self.length:
+            return None
+        if index == 0:
+            return self.popfirst()
+        if index == self.length-1:
+            return self.pop()
+        pre = self.get(index - 1)
+        temp = pre.next
+        pre.next = temp.next
+        temp.next = None
+        return temp.value
+    
+    def reverse(self):
+        temp = self.head
+        self.head = self.tail
+        self.tail = temp
+        after = temp.next
+        before = None
+        for _ in range(self.length):
+            after = temp.next
+            temp.next = before
+            before = temp
+            temp = after

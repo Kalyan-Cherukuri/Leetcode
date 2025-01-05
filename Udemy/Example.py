@@ -4,7 +4,7 @@ class Node:
         self.next = None
 
 class LinkedList:
-    def __init__(self, value):
+    def __init(self, value):
         new_node = Node(value)
         self.head = new_node
         self.tail = new_node
@@ -65,35 +65,58 @@ class LinkedList:
             self.tail = None
         return temp.value
     
-    print("Creating Linked List")
-my_linked_list = LinkedList(3)
+    def get(self, index):
+        if index < 0 or index >= self.length:
+            return None
+        temp = self.head
+        for _ in range(index):
+            temp = temp.next
+        return temp
+    
+    def set_value(self, index, value):
+        temp = self.get(index)
+        if temp:
+            temp.value = value
+            return True
+        return False
+    
+    def insert(self, index, value):
+        if index < 0 or index >= self.length:
+            return False
+        if index == 0:
+            return self.prepend(value)
+        if index == self.length:
+            return self.append(value)
+        new_node = Node(value)
+        temp = self.get(index - 1)
+        new_node.next = temp.next
+        temp.next = new_node
+        self.length += 1
+        return True
+    
+    def remove(self, index):
+        if index < 0 or index >= self.length:
+            return None
+        if index == 0:
+            return self.popfirst()
+        if index == self.length:
+            return self.pop()
+        pre = self.get(index)
+        temp = pre.next
+        pre.next = temp.next
+        temp.next = None
+        self.length -= 1
+        return temp
 
-print("Appending :")
-my_linked_list.append(4)
-
-print("Prepending: ")
-my_linked_list.prepend(2)
-
-my_linked_list.prepend(1)
-
-print("Printing: ")
-my_linked_list.printlist()
-
-print("pop First: ")
-print(my_linked_list.popfirst())
-
-print(my_linked_list.popfirst())
-
-print(my_linked_list.popfirst())
-
-print(my_linked_list.popfirst())
-
-print(my_linked_list.popfirst())
-
-print("Printing: ")
-my_linked_list.printlist()
-
-"""
-#print(my_linked_list.pop())
-
-print(my_linked_list.pop())"""
+    def reverse(self):
+        temp = self.head
+        self.head = self.tail
+        self.tail = temp
+        after = temp.next
+        before = None
+        for _ in range(self.length):
+            after = temp.next
+            temp.next = before
+            before = temp
+            temp = after
+            
